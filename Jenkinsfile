@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         nodejs "NodeJS"
+        docker "Docker"
     }
     stages{
         stage('checkout'){
@@ -18,6 +19,11 @@ pipeline {
         stage('Build'){
             steps{
                 sh 'npm run build'
+            }
+        }
+        stage('Build image'){
+            steps{
+                sh 'docker build -t uver_project:1.0 .'
             }
         }
     }
