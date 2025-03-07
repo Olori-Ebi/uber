@@ -23,7 +23,8 @@ pipeline {
         }
         stage('Build image'){
             steps{
-                sh 'docker build -t uver_project:1.0 .'
+                sh 'docer -v'
+                sh 'docker build -t uber_project .'
             }
         }
     }
