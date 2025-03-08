@@ -28,11 +28,14 @@ pipeline {
         }
         stage('Docer push'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')])
-                sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                sh 'docker tag uber_project oloriebi95/uber_project'
-                sh 'docker push oloriebi95/uber_project'
-                sh 'docker logout'
+                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                    sh """
+                        echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                        docker tag uber_project oloriebi95/uber_project:latest
+                        docker push oloriebi95/uber_project:latest
+                        docker logout
+                    """
+                }
             }
         }
     }
