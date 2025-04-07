@@ -13,6 +13,7 @@ export const dataSourceOptions: DataSourceOptions = {
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/src/migrations/*.js'],
     synchronize: true,
+    ssl: process.env.POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false,
   };
   
   const dataSource = new DataSource(dataSourceOptions);
