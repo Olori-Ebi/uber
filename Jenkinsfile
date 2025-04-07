@@ -30,7 +30,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
                     sh """
-                        echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                        docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
                         docker tag uber_project oloriebi95/uber_project:latest
                         docker push oloriebi95/uber_project:latest
                         docker logout
