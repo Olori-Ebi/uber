@@ -36,14 +36,16 @@ jobs:
       - name: Pull Image from Dockerhub
         run: docker pull postgres
 
+      - name: Clean up old containers and networks (optional)
+        run: |
+          docker rm -f uberv2_project-container || true
+          docker network rm uberv2-network || true
+
       - name: Create Docker network
         run: docker network create uberv2-network
 
       - name: Run postgres in network
         run: docker run --name postgres --network uberv2-network -e POSTGRES_PASSWORD=mts121101 -e POSTGRES_USER=seunayo -e POSTGRES_DB=uberv2 -p 5432:5432 -d postgres
-      
-      - name: Delete Old container
-        run: docker rm -f uberv2_project-container
 
       - name: Run App container in same network
         run: docker run -d -p 3000:3000 --name uberv2_project-container --network uberv2-network oloriebi95/uberv2_project
