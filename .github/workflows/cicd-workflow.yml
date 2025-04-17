@@ -36,6 +36,12 @@ jobs:
       - name: Pull Image from Dockerhub
         run: docker pull postgres
 
+      - name: Clean up old containers and networks
+        run: |
+          docker rm -f uberv2_project-container || true
+          docker rm -f postgres || true
+          docker network rm uberv2-network || true
+          
       - name: Create Docker network (if not exists)
         run: |
           docker network inspect uberv2-network >/dev/null 2>&1 || docker network create uberv2-network
