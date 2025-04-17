@@ -10,7 +10,7 @@ import { DriverModule } from './driver/driver.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(dataSourceOptions), ConfigModule.forRoot({
-    envFilePath: '.env.development',
+    envFilePath: '.env',
     isGlobal: true,
   }), AuthModule, RideModule, DriverModule,],
   controllers: [AppController],

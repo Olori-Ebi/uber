@@ -32,9 +32,18 @@ jobs:
     steps:
       - name: Check Docker version
         run: docker --version
+        
       - name: Pull Image from Dockerhub
-        run: docker pull oloriebi95/uberv2_project:latest
-      - name: Delete Old container
-        run: docker rm -f uberv2_project-container
-      - name: Run Docker container
-        run: docker run -d -p 3000:3000 --name uberv2_project-container oloriebi95/uberv2_project
+        run: docker pull postgres
+
+      - name: Create Docker network
+        run: docker network create uberv2-network
+
+      - name: Run postgres in network
+        run: docker run --name postgres --network uberv2-network -e POSTGRES_PASSWORD=mts121101 -e POSTGRES_USER=seunayo -e POSTGRES_DB=uberv2 -p 5432:5432 -d postgres
+
+      - name: Run App container in same network
+        run: docker run -d -p 3000:3000 --name uberv2_project-container --network uberv2-network oloriebi95/uberv2_project
+      
+      - name: View app container logs (if it crashes)
+        run: docker logs uberv2_project-container

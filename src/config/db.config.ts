@@ -4,11 +4,11 @@ config();
 
 export const dataSourceOptions: DataSourceOptions = {
     type: 'postgres',
-    host: process.env.POSTGRES_HOST,
-    port: +process.env.POSTGRES_PORT! || 5432,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
+    host: process.env.POSTGRES_HOST || 'postgres',
+    port: +process.env.POSTGRES_PORT! || 5433,
+    username: process.env.POSTGRES_USER || 'seunayo',
+    password: process.env.POSTGRES_PASSWORD || 'mts121101',
+    database: process.env.POSTGRES_DB || 'uberv2',
     logging: false,
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/src/migrations/*.js'],
