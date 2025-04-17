@@ -1,0 +1,38 @@
+name: CICD
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20]
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      
+      - name: Login to Docker
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build Docker Image
+        run: docker build -t oloriebi95/uberv2_project .
+      
+      - name: Publish Image to Dockerhub
+        run: docker push oloriebi95/uberv2_project:latest
+
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Pull Image from Dockerhub
+        run: docker pull oloriebi95/uberv2_project:latest
+      - name: Delete Old container
+        run: docker rm -f uberv2_project-container
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 --name uberv2_project-container oloriebi95/uberv2_project
